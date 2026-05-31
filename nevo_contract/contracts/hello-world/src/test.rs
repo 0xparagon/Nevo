@@ -1537,18 +1537,22 @@ fn test_config_bounds_title_reasonable_length() {
     // Should handle reasonable title lengths
     let pool_id = client.create_pool(&creator, &title, &description, &goal);
     assert_eq!(pool_id, 1);
+}ly
+    client.claim_funds(&student1, &pool_id, &claim_amount, &token_address);
+    let app1 = client.get_application(&pool_id, &student1);
+    assert!(app1.is_some());
+    assert_eq!(app1.unwrap().amount_claimed, claim_amount);
+
+    // Student3 can still claim (operations are isolated)
+    client.claim_funds(&student3, &pool_id, &claim_amount, &token_address);
+    let app3 = client.get_application(&pool_id, &student3);
+    assert!(app3.is_some());
+    assert_eq!(app3.unwrap().amount_claimed, claim_amount);
 }
 
 /// Test 3: System recoverable after errors - pool can continue after failed operations
 #[test]
 fn test_recovery_system_continues_after_error() {
-    let env = Env::default();
-    env.mock_all_auths();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
-
-    let creator = Address::generate(&env);
-    let donor = Address::generate(&env);
     let student = Address::generate(&env);
     let token_address = Address::generate(&env);
 
@@ -3764,6 +3768,19 @@ fn test_upgrade_backward_compatibility_existing_operations() {
     assert_eq!(pool.3, 300_000_000);
 }
 
+#[test]
+#[should_panic(expected = "Pool not found")]
+fn test_donate_to_nonexistent_pool_panics() {
+    let env = Env::default();
+    let contract_id = env.register(Contract, ());
+    let client = ContractClient::new(&env, &contract_id);
+
+    let donor = Address::generate(&env);
+    
+    // Doc states: panics with "Pool not found" when donating to non-existent pool
+    client.donate(&999, &donor, &100_000_000);
+}
+
 // ============= EVENT EMISSION TESTS =============
 // These tests verify that all contract operations emit correct events with proper parameters
 
@@ -3771,19 +3788,6 @@ fn test_upgrade_backward_compatibility_existing_operations() {
 /// Verifies: Pool creation event is emitted with all required fields
 #[test]
 fn test_event_pool_creation_emits_correct_event() {
-    let env = Env::default();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
-
-    let creator = Address::generate(&env);
-    let title = String::from_str(&env, "Test Pool");
-    let description = String::from_str(&env, "Test description");
-    let goal: u128 = 1_000_000_000;
-
-    let pool_id = client.create_pool(&creator, &title, &description, &goal);
-    assert_eq!(pool_id, 1);
-}
-
 // Tests for Issue #485: Pool metadata retrieval
 #[test]
 fn test_pool_metadata_retrieval() {
