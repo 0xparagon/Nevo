@@ -2,20 +2,27 @@
 
 import React, { useEffect } from 'react';
 import { useThemeStore } from '@/src/store/themeStore';
+import { supportsMatchMedia } from '@/src/lib/browser';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme, setTheme } = useThemeStore();
 
   // Sync store with the class already applied by the inline script on mount
   useEffect(() => {
-    const stored = localStorage.getItem('nevo-theme');
+    let stored: string | null = null;
+
+    try {
+      stored = localStorage.getItem('nevo-theme');
+    } catch {
+      stored = null;
+    }
+
     if (stored === 'dark' || stored === 'light') {
       setTheme(stored);
+    } else if (supportsMatchMedia() && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
     } else {
-      const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      ).matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+      setTheme('light');
     }
   }, [setTheme]);
 

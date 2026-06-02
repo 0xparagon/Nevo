@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { copyTextToClipboard } from '@/src/lib/browser';
 
 type Story = {
   id: string;
@@ -71,15 +72,24 @@ export default function StoriesPage() {
 function StoryCard({ story }: { story: Story }) {
   const handleShare = async () => {
     const url = `${window.location.origin}/pools/${story.poolId}`;
+
     if (navigator.share) {
       try {
         await navigator.share({ title: story.title, text: story.summary, url });
-      } catch {}
-    } else {
-      await navigator.clipboard.writeText(url);
-      // fallback: copied
+        return;
+      } catch {
+        // Fall back to copy on browsers that partially support navigator.share
+      }
+    }
+
+    try {
+      await copyTextToClipboard(url);
       // eslint-disable-next-line no-alert
       alert('Link copied to clipboard');
+    } catch {
+      // Fallback for legacy browsers that do not support clipboard API.
+      // eslint-disable-next-line no-alert
+      prompt('Copy this URL:', url);
     }
   };
 

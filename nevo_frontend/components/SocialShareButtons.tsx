@@ -2,6 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import { trackingService } from '@/lib/tracking';
+import { copyTextToClipboard } from '@/src/lib/browser';
 
 interface SocialShareButtonsProps {
   poolId: string;
@@ -51,7 +52,7 @@ export const SocialShareButtons: FC<SocialShareButtonsProps> = ({
   const handleCopyLink = async () => {
     trackingService.trackShareClick(poolId, 'copy');
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      await copyTextToClipboard(shareUrl);
       setCopied(true);
       // Reset the copied state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
