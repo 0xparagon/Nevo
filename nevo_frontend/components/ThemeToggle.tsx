@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { useThemeStore } from '@/src/store/themeStore';
-import { supportsMatchMedia } from '@/src/lib/browser';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme, setTheme } = useThemeStore();
@@ -19,7 +18,7 @@ export default function ThemeToggle() {
 
     if (stored === 'dark' || stored === 'light') {
       setTheme(stored);
-    } else if (supportsMatchMedia() && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    } else if (typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
     } else {
       setTheme('light');

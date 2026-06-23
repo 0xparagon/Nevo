@@ -9,13 +9,9 @@ import {
   NAV_LINKS,
 } from '@/components/MobileMenu';
 import ThemeToggle from '@/components/ThemeToggle';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { useTranslation } from 'react-i18next';
-import '@/src/lib/i18n';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { t } = useTranslation();
 
   function openMenu() {
     setMenuOpen(true);
@@ -46,11 +42,10 @@ export default function Navbar() {
                 href={link.href}
                 className="font-medium text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 rounded"
               >
-                {t(link.key.replace(/^nav\./, 'nav.'))}
+                {link.label}
               </Link>
             ))}
             <ThemeToggle />
-            <LanguageSwitcher />
             <ConnectWallet />
           </div>
 

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
-import { RateLimitToast } from '@/components/RateLimitToast';
 
 // Using system fonts to avoid network fetch during build (CI friendly)
 
@@ -73,7 +72,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}
-        <RateLimitToast />
       </body>
     </html>
   );

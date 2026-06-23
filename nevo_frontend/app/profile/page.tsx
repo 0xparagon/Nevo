@@ -5,7 +5,6 @@ import { useWalletStore } from '@/src/store/walletStore';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { WalletAddress } from '@/components/WalletAddress';
-import { MOCK_TRANSACTIONS } from '@/src/lib/mockTransactions';
 
 // Mock user preferences store
 interface UserPreferences {
@@ -287,7 +286,7 @@ export default function ProfilePage() {
               </a>
             </div>
             <div className="space-y-3">
-              {MOCK_TRANSACTIONS.slice(0, 3).map((tx) => (
+              {([] as { id: string; type: string; amount: string; asset: string; recipient: string; date: string }[]).map((tx) => (
                 <div
                   key={tx.id}
                   className="flex items-center gap-4 p-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-colors"

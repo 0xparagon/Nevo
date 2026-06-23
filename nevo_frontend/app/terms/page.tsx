@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import LegalPrint from '@/components/LegalPrint';
 
 const LAST_UPDATED = 'May 31, 2026';
 
@@ -13,7 +12,7 @@ export default function TermsPage() {
         </p>
       </div>
 
-      <LegalPrint lastUpdated={LAST_UPDATED} />
+      <p className="mb-6 text-sm text-[var(--color-text-muted)]">Last updated: {LAST_UPDATED}</p>
 
       <section className="prose max-w-none">
         <h2>1. Acceptance of Terms</h2>

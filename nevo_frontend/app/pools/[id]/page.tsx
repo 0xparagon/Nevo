@@ -5,8 +5,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { DonateModal } from '@/components/DonateModal';
 import { EmptyState } from '@/components/EmptyState';
-import { ReferralPanel } from '@/components/ReferralPanel';
-import { SocialShareButtons } from '@/components/SocialShareButtons';
 import { WalletAddress } from '@/components/WalletAddress';
 import type { Pool } from '@/src/store/poolsStore';
 import { useWalletStore } from '@/src/store/walletStore';
@@ -96,26 +94,6 @@ interface TimelineEvent {
   amount?: number;
 }
 
-const MOCK_TIMELINE: Record<string, TimelineEvent[]> = {
-  '1': [
-    { id: 'e1', label: 'Pool created', date: '2025-03-01' },
-    {
-      id: 'e2',
-      label: 'First donation received',
-      date: '2025-03-05',
-      amount: 500,
-    },
-  ],
-  '2': [
-    { id: 'e1', label: 'Pool created', date: '2025-01-15' },
-    { id: 'e2', label: 'Goal reached', date: '2025-02-01' },
-  ],
-  '3': [
-    { id: 'e1', label: 'Pool created', date: '2024-11-10' },
-    { id: 'e2', label: 'Pool completed', date: '2024-12-31' },
-  ],
-};
-
 const MOCK_LAST_UPDATED: Record<string, string> = {
   '1': '2025-04-15',
   '2': '2025-02-01',
@@ -127,7 +105,6 @@ export default function PoolDetailPage() {
   const { publicKey, initialize } = useWalletStore();
   const [pool, setPool] = useState<Pool | null>(null);
   const [contributors, setContributors] = useState<Contributor[]>([]);
-  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [donateOpen, setDonateOpen] = useState(false);
@@ -146,7 +123,6 @@ export default function PoolDetailPage() {
       } else {
         setPool(found);
         setContributors(MOCK_CONTRIBUTORS[id] ?? []);
-        setTimeline(MOCK_TIMELINE[id] ?? []);
       }
       setLoading(false);
     }, 300);
@@ -171,6 +147,7 @@ export default function PoolDetailPage() {
     );
   }
 
+  const timeline: TimelineEvent[] = [];
   const pct = Math.min(100, Math.round((pool.raised / pool.target) * 100));
   const isOwner = publicKey !== null && publicKey === pool.creator;
   const isCompleted = pool.status === 'Completed';
@@ -451,13 +428,6 @@ export default function PoolDetailPage() {
             )}
           </div>
 
-          <SocialShareButtons
-            poolId={pool.id}
-            poolTitle={pool.title}
-            customMessage={`Check out this amazing pool: "${pool.title}" - Support the cause and make a difference! 🌟`}
-          />
-
-          <ReferralPanel poolId={pool.id} />
         </aside>
       </div>
 

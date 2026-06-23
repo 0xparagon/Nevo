@@ -4,17 +4,15 @@ import Link from 'next/link';
 import { useCallback, useEffect, useId, useRef } from 'react';
 import ConnectWallet from '@/components/ConnectWallet';
 import ThemeToggle from '@/components/ThemeToggle';
-import { useTranslation } from 'react-i18next';
-import '@/src/lib/i18n';
 
 export const NAV_LINKS = [
-  { key: 'nav.home', href: '/' },
-  { key: 'nav.pools', href: '/pools' },
-  { key: 'nav.donations', href: '/donations' },
-  { key: 'nav.transactions', href: '/transactions' },
-  { key: 'nav.dashboard', href: '/dashboard' },
-  { key: 'nav.profile', href: '/profile' },
-  { key: 'nav.createPool', href: '/pools/new' },
+  { label: 'Home', href: '/' },
+  { label: 'Pools', href: '/pools' },
+  { label: 'Donations', href: '/donations' },
+  { label: 'Transactions', href: '/transactions' },
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Profile', href: '/profile' },
+  { label: 'Create Pool', href: '/pools/new' },
 ] as const;
 
 const FOCUSABLE =
@@ -29,7 +27,6 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const titleId = useId();
-  const { t } = useTranslation();
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -91,7 +88,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       <button
         type="button"
         className="absolute inset-0 bg-black/40 transition-opacity duration-300"
-        aria-label={t('menu.close')}
+        aria-label="Close menu"
         tabIndex={open ? 0 : -1}
         onClick={onClose}
       />
@@ -107,14 +104,14 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       >
         <div className="flex h-14 items-center justify-between border-b border-[var(--color-border)] px-4">
           <span id={titleId} className="text-sm font-semibold">
-            {t('menu.title')}
+            Menu
           </span>
           <button
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
             className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[var(--color-text-muted)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
-            aria-label={t('menu.close')}
+            aria-label="Close menu"
           >
             <CloseIcon />
           </button>
@@ -122,7 +119,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
 
         <nav
           className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
-          aria-label={t('menu.title')}
+          aria-label="Menu"
         >
           {NAV_LINKS.map((link) => (
             <Link
@@ -131,7 +128,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               onClick={onClose}
               className="rounded-lg px-3 py-2.5 text-base font-medium text-[var(--color-text)] hover:bg-[var(--color-surface-raised)] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
-              {t(link.key.replace(/^nav\./, 'nav.'))}
+              {link.label}
             </Link>
           ))}
         </nav>
