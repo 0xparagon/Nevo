@@ -107,7 +107,8 @@ const COMPANY_VALUES: CompanyValue[] = [
   {
     id: 'community',
     title: 'Community',
-    description: 'Empowering local communities through decentralized fundraising.',
+    description:
+      'Empowering local communities through decentralized fundraising.',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -192,9 +193,9 @@ export default function AboutPage() {
           Our Mission
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--color-text-muted)] mx-auto">
-          To empower anyone, anywhere to create transparent, secure, and efficient
-          fundraising pools on the Stellar blockchain — without intermediaries,
-          hidden fees, or complex technology barriers.
+          To empower anyone, anywhere to create transparent, secure, and
+          efficient fundraising pools on the Stellar blockchain — without
+          intermediaries, hidden fees, or complex technology barriers.
         </p>
       </section>
 
@@ -209,10 +210,10 @@ export default function AboutPage() {
             comes from openness, not gatekeepers.
           </p>
           <p className="text-[var(--color-text-muted)] leading-relaxed mb-4">
-            Built on the Stellar blockchain, our platform leverages smart contracts
-            to create donation pools that are auditable, trustless, and efficient.
-            Every contribution is recorded on-chain, allowing anyone to verify that
-            funds reach their intended destination.
+            Built on the Stellar blockchain, our platform leverages smart
+            contracts to create donation pools that are auditable, trustless,
+            and efficient. Every contribution is recorded on-chain, allowing
+            anyone to verify that funds reach their intended destination.
           </p>
           <p className="text-[var(--color-text-muted)] leading-relaxed">
             Our platform is open-source and community-driven. We welcome
@@ -223,10 +224,7 @@ export default function AboutPage() {
       </section>
 
       <section aria-labelledby="values-heading" className="mb-16">
-        <h2
-          id="values-heading"
-          className="text-2xl font-bold text-center mb-8"
-        >
+        <h2 id="values-heading" className="text-2xl font-bold text-center mb-8">
           Our Values
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -248,10 +246,7 @@ export default function AboutPage() {
       </section>
 
       <section aria-labelledby="team-heading" className="mb-16">
-        <h2
-          id="team-heading"
-          className="text-2xl font-bold text-center mb-8"
-        >
+        <h2 id="team-heading" className="text-2xl font-bold text-center mb-8">
           Meet the Team
         </h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -396,9 +391,13 @@ export default function AboutPage() {
   );
 }
 
-export function AboutPageSkeleton() {
+function AboutPageSkeleton() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-12" aria-busy="true" aria-label="Loading about page">
+    <main
+      className="mx-auto max-w-5xl px-6 py-12"
+      aria-busy="true"
+      aria-label="Loading about page"
+    >
       <div className="mb-16 text-center">
         <div className="h-10 w-48 mx-auto animate-pulse rounded bg-[var(--color-border)] mb-4" />
         <div className="h-5 w-full max-w-2xl mx-auto animate-pulse rounded bg-[var(--color-border)] mb-2" />

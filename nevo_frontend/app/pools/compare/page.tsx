@@ -224,7 +224,7 @@ export default function PoolComparePage() {
                     className="px-8"
                   >
                     Compare {selectedPools.length} Pool
-                    {selectedPools.length !== 1 ? 's' : ''}
+                    {(selectedPools.length as number) !== 1 ? 's' : ''}
                   </Button>
                   {selectedPools.length > 0 && (
                     <Button

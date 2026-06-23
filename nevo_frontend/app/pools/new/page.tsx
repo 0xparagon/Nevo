@@ -86,7 +86,7 @@ function drawCropPreview(image: HTMLImageElement, zoom: number): string {
     0,
     0,
     targetWidth,
-    targetHeight,
+    targetHeight
   );
 
   return canvas.toDataURL('image/webp', 0.85);
@@ -97,7 +97,11 @@ async function generateCropPreview(file: File, zoom: number): Promise<string> {
   return drawCropPreview(image, zoom);
 }
 
-async function optimizeImage(file: File, zoom: number, onProgress?: (value: number) => void): Promise<string> {
+async function optimizeImage(
+  file: File,
+  zoom: number,
+  onProgress?: (value: number) => void
+): Promise<string> {
   if (onProgress) onProgress(10);
   const image = await loadImage(file);
   if (onProgress) onProgress(35);
@@ -150,16 +154,20 @@ function CreatePoolPageContent() {
   const [cropPreviewUrl, setCropPreviewUrl] = useState('');
   const [cropZoom, setCropZoom] = useState(1);
   const [imageProgress, setImageProgress] = useState(0);
-  const [imageUploadError, setImageUploadError] = useState<string | undefined>();
+  const [imageUploadError, setImageUploadError] = useState<
+    string | undefined
+  >();
   const [imageOptimizing, setImageOptimizing] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!imageFile) setCropPreviewUrl('');
+  }, [imageFile]);
 
-    if (!imageFile) {
-      setCropPreviewUrl('');
-      return undefined;
-    }
+  useEffect(() => {
+    if (!imageFile) return undefined;
+
+    let cancelled = false;
 
     generateCropPreview(imageFile, cropZoom)
       .then((preview) => {
@@ -227,14 +235,20 @@ function CreatePoolPageContent() {
     setImageOptimizing(true);
 
     try {
-      const dataUrl = await optimizeImage(imageFile, cropZoom, setImageProgress);
+      const dataUrl = await optimizeImage(
+        imageFile,
+        cropZoom,
+        setImageProgress
+      );
       update('imageUrl', dataUrl);
       setImagePreviewUrl(dataUrl);
       setImageFile(null);
       setCropPreviewUrl('');
       setCropZoom(1);
     } catch (error) {
-      setImageUploadError('Could not process the image. Please try a different file.');
+      setImageUploadError(
+        'Could not process the image. Please try a different file.'
+      );
     } finally {
       setImageOptimizing(false);
       setImageProgress(0);

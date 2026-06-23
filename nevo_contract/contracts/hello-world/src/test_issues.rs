@@ -4,7 +4,7 @@ use super::*;
 use soroban_sdk::{
     testutils::{Address as _, Ledger, MockAuth, MockAuthInvoke},
     token::StellarAssetClient,
-    Address, Env, IntoVal, String, Vec, Symbol,
+    Address, Env, IntoVal, String, Symbol, Vec,
 };
 
 fn create_token(env: &Env, amount: i128, recipient: &Address) -> Address {
@@ -141,7 +141,10 @@ fn test_emergency_withdrawal_token_transfer() {
     let has_request = env.as_contract(&contract_id, || {
         env.storage().persistent().has(&withdrawal_key)
     });
-    assert!(!has_request, "Withdrawal request should be removed after execution");
+    assert!(
+        !has_request,
+        "Withdrawal request should be removed after execution"
+    );
 }
 
 // ============= ISSUE #461: POOL CONTRIBUTION EDGE CASE TESTS FOR STATE VALIDATION =============
@@ -192,7 +195,8 @@ fn test_contribute_to_closed_pool_fails() {
         &1_000_000_000u128,
     );
 
-    // Close the pool
+    // Transition to Disbursed so close_pool is allowed, then close the pool
+    client.set_pool_state(&pool_id, &PoolState::Disbursed);
     client.close_pool(&pool_id);
 
     // Should fail with "Pool is closed"
