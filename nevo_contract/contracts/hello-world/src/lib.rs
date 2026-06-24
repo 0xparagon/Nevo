@@ -24,6 +24,37 @@ const POOL_SCHOOL_PREFIX: &str = "pool_school";
 const EMERGENCY_WITHDRAWAL_PREFIX: &str = "emergency_withdraw";
 const GRACE_PERIOD_SECS: u64 = 86400; // 24 hours
 
+// Application and claim tracking constants
+const APPLICATION_STATUS_PREFIX: &str = "app_status";
+const CLAIMED_AMOUNT_PREFIX: &str = "claimed_amount";
+const APPLICATION_STATUS_APPROVED: &str = "Approved";
+const APPLICATION_STATUS_REJECTED: &str = "Rejected";
+
+// Protocol fees accumulator - tracks unclaimed fees collected from operations
+const UNCLAIMED_FEES: &str = "unclaimed_fees";
+
+// Creation fee key - stores the fee charged when creating a new pool
+const CREATION_FEE_KEY: &str = "creation_fee";
+
+// Refund deadline constants
+// Donors may request a refund only after the pool deadline has passed AND
+// the grace period (REFUND_GRACE_PERIOD_LEDGERS) has elapsed.
+const POOL_DEADLINE_PREFIX: &str = "pool_deadline";
+const REFUND_GRACE_PERIOD_LEDGERS: u32 = 17_280; // ~24 hours at 5s/ledger
+
+// Pool metadata validation constraints
+const MAX_DESCRIPTION_LENGTH: usize = 500;
+const MAX_URL_LENGTH: usize = 256;
+const MAX_IMAGE_HASH_LENGTH: usize = 64;
+
+// ─── Event Topics ────────────────────────────────────────────────────────
+
+const POOL_CREATED: Symbol = symbol_short!("pool_crtd");
+const DONATION_MADE: Symbol = symbol_short!("donation");
+const CONTRIBUTION: Symbol = symbol_short!("contrib");
+const POOL_CLOSED: Symbol = symbol_short!("pool_cls");
+const APPLICATION_SUBMITTED: Symbol = symbol_short!("app_sub");
+
 // Helper functions for timestamp/deadline edge-case tests
 // These are deterministic, test-oriented helpers used by unit tests
 // to avoid reliance on external ledger state in the test harness.
@@ -247,7 +278,14 @@ impl Contract {
             panic!("School is not registered");
         }
 
-        let pool_id = Self::create_pool(env.clone(), creator, title, description, goal, application_deadline);
+        let pool_id = Self::create_pool(
+            env.clone(),
+            creator,
+            title,
+            description,
+            goal,
+            application_deadline,
+        );
         let pool_school_key = (Symbol::new(&env, POOL_SCHOOL_PREFIX), pool_id);
         env.storage().persistent().set(&pool_school_key, &school);
         pool_id
