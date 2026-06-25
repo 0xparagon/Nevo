@@ -1,7 +1,6 @@
-import { BadRequestException, Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import type { VerifyDto, AuthResult } from './auth.service';
-import { NonceService } from './nonce.service';
+import type { VerifyDto, AuthResult, ChallengeResult } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +19,11 @@ export class AuthController {
 
     const nonce = await this.nonceService.generateNonce(publicKey);
     return { nonce };
+  }
+
+  @Get('challenge')
+  challenge(@Query('publicKey') publicKey: string): ChallengeResult {
+    return this.authService.generateChallenge(publicKey);
   }
 
   @Post('verify')
